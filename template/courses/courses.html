@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block 'title' %}courses{% endblock 'title' %}
+{% block 'title' %}course{% endblock 'title' %}
 {% block 'content' %}
+
 
   <main id="main" data-aos="fade-in">
 
@@ -25,46 +26,69 @@
 
         <div class="row" data-aos="zoom-in" data-aos-delay="100">
             {% for cr in cr %}
+
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
             <div class="course-item">
-              <img src="{% static 'assets/img/course-1.jpg' %}" class="img-fluid" alt="...">
+              <img src={{cr.image.url}} class="img-fluid" alt="...">
               <div class="course-content">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                  <h4>Web Development</h4>
+                  {% for cat in cr.category.all  %}
+                  <h4>{{cat.name}}</h4>
+                  {% endfor %}
                   <p class="price">${{cr.price}}</p>
                 </div>
 
-                <h3><a href="course-details.html">{{cr.title}}</a></h3>
-                <p>{{cr.content }}
+                <h3><a href="course-details.html">{{cr.capt}}</a></h3>
+                <p>{{cr.content|truncatechars:10}}</p>
                 <div class="trainer d-flex justify-content-between align-items-center">
                   <div class="trainer-profile d-flex align-items-center">
-                    <img src="{% static 'assets/img/trainers/trainer-1.jpg' %}" class="img-fluid" alt="">
-                    <span>Antonio</span>
+                    <img src={{cr.teacher.image.url}} class="img-fluid" alt="">
+                    <span><a href= {% url 'courses:course_teacher' teacher=cr.teacher.info.username %}> {{cr.teacher.info.username}}</a></span>
                   </div>
                   <div class="trainer-rank d-flex align-items-center">
-                    <i class="bx bx-user"></i>&nbsp;50
+                    <i class="bx bx-user"></i>&nbsp;{{cr.counted_views}}
                     &nbsp;&nbsp;
-                    <i class="bx bx-heart"></i>&nbsp;65
+                    <i class="bx bx-heart"></i>&nbsp;{{cr.counted_like}}
+                    <span>{{cr.schedule|date:'Y/ m/ d'}}</span>
                   </div>
                 </div>
               </div>
             </div>
           </div> <!-- End Course Item-->
             {% endfor %}
+       
+
         </div>
 
       </div>
     </section><!-- End Courses Section -->
     <div align="center" style="font-size:35px;">
-      <a href="#"><<</a>
-      <a href="#">....</a>
-      <a href="#"><  </a>
-      <a href="#">....</a>
-      <a href="#">></a>
-      <a href="#">....</a>
-      <a href="#">>></a>
+      <style>
+    </style>
+      
+      {% if courses.has_next and courses.has_previous %}
+      <a href="?page={{first_page}}"><<</a>
+      <a href="#">{{courses.previous_page_number}}</a>
+      <a href="?page={{courses.previous_page_number}}"><  </a>
+      <a href="#" class="dimmed">{{courses.number}}</a>
+      <a href="?page={{courses.next_page_number}}">></a>
+      <a href="#">{{courses.next_page_number}}</a>
+      <a href="?page={{last_page}}">>></a>
+      {% elif courses.has_next %}
+      <a href="?page={{courses.next_page_number}}">></a>
+      <a href="#">{{courses.next_page_number}}</a>
+      <a href="?page={{last_page}}">>></a>
+      {% elif courses.has_previous %}
+      <a href="?page={{first_page}}"><<</a>
+      <a href="#">{{courses.previous_page_number}}</a>
+      <a href="?page={{courses.previous_page_number}}"><  </a>
+      {% endif %}
+      
+      
+
     </div>
 
   </main><!-- End #main -->
+  {% endblock 'content' %}
 
-{% endblock 'content' %}
+  

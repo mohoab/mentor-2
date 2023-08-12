@@ -14,22 +14,20 @@ class category(md.Model):
     def __str__(self):
         return self.name
 #############################################################
-class trainers(md.Model):
-    info = md.ForeignKey( User , on_delete=md.CASCADE)
-    skills = md.ManyToManyField(skills)
-    description = md.TextField()
-    image = models.ImageField(upload_to='trainer', default='trainer/teacher.png')
+class trainers(models.Model):
+    info = models.ForeignKey(User , on_delete=models.CASCADE)
+    skills = models.ManyToManyField(skills)
+    description = models.TextField()
+    image = models.ImageField(upload_to='trainer', default='teacher.png')
     twitter = models.CharField(max_length=255, default='#')
     facebook = models.CharField(max_length=255, default='#')
     instagram = models.CharField(max_length=255, default='#')
     linkdin = models.CharField(max_length=255, default='#')
     status = models.BooleanField(default=False)
     updated_datetime = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
-        self.info.username
-
-
+        return self.info.username
 
 #############################################################
 class course(md.Model):
@@ -54,7 +52,6 @@ class course(md.Model):
         return self.title
     def capt(self):
         return self.title.capitalize()
-    def content(self):
-        return self.content[:50]
+                    
 
 ###################################################################
